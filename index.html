@@ -1,0 +1,893 @@
+<header>
+  <h1>🎮 GameZone</h1>
+  <p>შენი სათამაშო სამყარო!</p>
+</header>
+
+<section class="intro">
+  <h2>აირჩიე შენი თამაში</h2>
+  <p>მოძებნე თამაში ან ითამაშე Target Challenge!</p>
+
+  <input id="search" type="text" placeholder="🔎 მოძებნე თამაში...">
+</section>
+
+<main class="games">
+
+  <div class="card">
+    <div class="emoji">🚗</div>
+    <h3>Racing Game</h3>
+    <p>სარბოლო თამაში</p>
+    <button onclick="showGame('Racing Game')">არჩევა</button>
+  </div>
+
+  <div class="card">
+    <div class="emoji">⚽</div>
+    <h3>Football Game</h3>
+    <p>ფეხბურთის თამაში</p>
+    <button onclick="showGame('Football Game')">არჩევა</button>
+  </div>
+
+  <div class="card">
+
+    <div class="emoji">🎯</div>
+
+    <h3>Target Challenge</h3>
+
+    <p>30 წამში დააგროვე რაც შეიძლება მეტი ქულა!</p>
+
+    <p>⭐ ქულა: <span id="score">0</span></p>
+    <p>⏱️ დრო: <span id="time">30</span></p>
+    <p>🏆 რეკორდი: <span id="bestScore">0</span></p>
+    <p>🔥 Combo: <span id="combo">0</span></p>
+    <p>🎮 Level: <span id="level">1</span></p>
+    <p>🪙 მონეტები: <span id="coins">0</span></p>
+
+    <div class="xp-container">
+      <div id="xpBar"></div>
+    </div>
+
+    <p>⚡ XP: <span id="xpText">0 / 20</span></p>
+
+    <button id="startButton" onclick="startGame()">
+      თამაშის დაწყება
+    </button>
+
+    <div class="difficulty">
+
+      <p>სირთულე:</p>
+
+      <button onclick="setDifficulty('easy')">
+        🟢 Easy
+      </button>
+
+      <button onclick="setDifficulty('medium')">
+        🟡 Medium
+      </button>
+
+      <button onclick="setDifficulty('hard')">
+        🔴 Hard
+      </button>
+
+    </div>
+
+    <p id="difficultyText">
+      არჩეულია: 🟢 Easy
+    </p>
+
+    <div id="gameArea">
+
+      <button id="target" onclick="hitTarget()" disabled>
+        🎯 დააჭირე!
+      </button>
+
+      <button id="enemy" onclick="hitEnemy()" disabled>
+        👾
+      </button>
+
+    </div>
+
+    <p id="message">
+      დააჭირე თამაშის დაწყებას!
+    </p>
+
+    <div class="shop">
+
+      <h3>🛒 Shop</h3>
+
+      <button onclick="buyItem('double')">
+        ⚡ 2X ქულა — 20 🪙
+      </button>
+
+      <button onclick="buyItem('shield')">
+        🛡️ Shield — 30 🪙
+      </button>
+
+      <p id="shopMessage">
+        აირჩიე ნივთი Shop-იდან!
+      </p>
+
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+  <p>© 2026 GameZone | ნიკას საიტი</p>
+</footer>
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #101323;
+  color: white;
+  text-align: center;
+}
+
+header {
+  background: #202744;
+  padding: 25px;
+}
+
+h1 {
+  color: #8b91ff;
+  font-size: 38px;
+}
+
+.intro {
+  padding: 25px;
+}
+
+#search {
+  width: 90%;
+  max-width: 380px;
+  padding: 13px;
+  border: 2px solid #777bff;
+  border-radius: 10px;
+  background: #202744;
+  color: white;
+  font-size: 16px;
+}
+
+.games {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+}
+
+.card {
+  background: #202744;
+  width: 300px;
+  padding: 22px;
+  border-radius: 16px;
+}
+
+.emoji {
+  font-size: 55px;
+}
+
+button {
+  background: #777bff;
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  margin: 5px;
+  border-radius: 9px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  background: #555bea;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#gameArea {
+  position: relative;
+  height: 180px;
+  margin-top: 15px;
+  background: #151a30;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+#target {
+  position: absolute;
+  margin: 0;
+}
+
+#enemy {
+  position: absolute;
+  margin: 0;
+  background: #d94b6a;
+}
+
+#enemy:hover {
+  background: #b93754;
+}
+
+.difficulty {
+  margin: 15px 0;
+}
+
+.difficulty button {
+  font-size: 14px;
+  padding: 8px 12px;
+}
+
+#difficultyText {
+  color: #b8bfdc;
+}
+
+.xp-container {
+  width: 100%;
+  height: 18px;
+  background: #101323;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 10px 0;
+  border: 2px solid #777bff;
+}
+
+#xpBar {
+  width: 0%;
+  height: 100%;
+  background: #777bff;
+  transition: width 0.3s;
+}
+
+.shop {
+  margin-top: 20px;
+  padding: 15px;
+  background: #151a30;
+  border-radius: 12px;
+}
+
+.shop h3 {
+  color: #8b91ff;
+}
+
+.shop button {
+  font-size: 14px;
+  display: block;
+  width: 90%;
+  max-width: 240px;
+  margin: 8px auto;
+}
+
+#shopMessage {
+  color: #b8bfdc;
+  font-size: 14px;
+}
+
+footer {
+  padding: 20px;
+  color: #b8bfdc;
+}
+
+let score = 0;
+let timeLeft = 30;
+let combo = 0;
+let level = 1;
+let xp = 0;
+
+let gameActive = false;
+
+let gameTimer = null;
+let targetTimer = null;
+let enemyTimer = null;
+let enemyMoveTimer = null;
+
+let bestScore =
+  Number(localStorage.getItem("gameZoneBest")) || 0;
+
+let coins =
+  Number(localStorage.getItem("gameZoneCoins")) || 0;
+
+let doublePoints = false;
+let shield = false;
+
+let targetSpeed = 1200;
+
+// 👾 მტრის პარამეტრები
+let enemyVisibleTime = 3000;
+let enemyMoveSpeed = 500;
+
+// 👾 გაქრობის შემდეგ 2 წამი პაუზა
+let enemyPause = 2000;
+
+
+document.getElementById("bestScore").textContent =
+  bestScore;
+
+document.getElementById("coins").textContent =
+  coins;
+
+
+// 🎮 თამაშის დაწყება
+
+function startGame() {
+
+  clearInterval(gameTimer);
+  clearTimeout(targetTimer);
+  clearTimeout(enemyTimer);
+  clearTimeout(enemyMoveTimer);
+
+  score = 0;
+  timeLeft = 30;
+  combo = 0;
+  level = 1;
+  xp = 0;
+
+  doublePoints = false;
+  shield = false;
+
+  gameActive = true;
+
+  document.getElementById("score").textContent = 0;
+  document.getElementById("time").textContent = 30;
+  document.getElementById("combo").textContent = 0;
+  document.getElementById("level").textContent = 1;
+
+  document.getElementById("xpBar").style.width = "0%";
+  document.getElementById("xpText").textContent = "0 / 20";
+
+  document.getElementById("target").disabled = false;
+  document.getElementById("enemy").disabled = false;
+
+  document.getElementById("enemy").style.display = "none";
+
+  document.getElementById("message").textContent =
+    "🎯 დააჭირე Target-ს და მოერიდე 👾-ს!";
+
+  updateEnemySpeed();
+
+  moveTarget();
+  startTargetMovement();
+
+  // 👾 პირველი მტერი
+  showEnemy();
+
+
+  gameTimer = setInterval(function() {
+
+    timeLeft--;
+
+    document.getElementById("time").textContent =
+      timeLeft;
+
+    if (timeLeft <= 0) {
+      endGame();
+    }
+
+  }, 1000);
+}
+
+
+// 🏁 თამაშის დასრულება
+
+function endGame() {
+
+  clearInterval(gameTimer);
+  clearTimeout(targetTimer);
+  clearTimeout(enemyTimer);
+  clearTimeout(enemyMoveTimer);
+
+  gameActive = false;
+
+  document.getElementById("target").disabled = true;
+  document.getElementById("enemy").disabled = true;
+
+  document.getElementById("enemy").style.display = "none";
+
+  document.getElementById("message").textContent =
+    "🏁 დასრულდა! ქულა: " +
+    score +
+    " | Level: " +
+    level;
+}
+
+
+// 🎯 Target-ზე დაჭერა
+
+function hitTarget() {
+
+  if (!gameActive) return;
+
+  combo++;
+
+  let points = combo;
+
+  if (doublePoints) {
+    points *= 2;
+  }
+
+  score += points;
+  xp += combo;
+  coins++;
+
+  document.getElementById("score").textContent = score;
+  document.getElementById("combo").textContent = combo;
+  document.getElementById("coins").textContent = coins;
+
+  localStorage.setItem(
+    "gameZoneCoins",
+    coins
+  );
+
+
+  // ⚡ XP
+
+  let xpNeeded = 20;
+
+  if (level === 2) {
+    xpNeeded = 30;
+  }
+
+  if (level >= 3) {
+    xpNeeded = 50;
+  }
+
+
+  // 🎮 Level Up
+
+  if (xp >= xpNeeded) {
+
+    xp -= xpNeeded;
+
+    level++;
+
+    document.getElementById("level").textContent =
+      level;
+
+    updateEnemySpeed();
+
+    document.getElementById("message").textContent =
+      "🎉 LEVEL UP! ახლა ხარ Level " +
+      level;
+  }
+
+
+  // 📊 XP Bar
+
+  let currentXpNeeded = 20;
+
+  if (level === 2) {
+    currentXpNeeded = 30;
+  }
+
+  if (level >= 3) {
+    currentXpNeeded = 50;
+  }
+
+  let xpPercent =
+    (xp / currentXpNeeded) * 100;
+
+  document.getElementById("xpBar").style.width =
+    xpPercent + "%";
+
+  document.getElementById("xpText").textContent =
+    xp + " / " + currentXpNeeded;
+
+
+  // 🔥 Combo
+
+  if (combo >= 3) {
+
+    document.getElementById("message").textContent =
+      "🔥 COMBO x" + combo + "!";
+  }
+
+
+  // 🏆 რეკორდი
+
+  if (score > bestScore) {
+
+    bestScore = score;
+
+    document.getElementById("bestScore").textContent =
+      bestScore;
+
+    localStorage.setItem(
+      "gameZoneBest",
+      bestScore
+    );
+  }
+
+
+  moveTarget();
+}
+
+
+// 👾 მტერზე დაჭერა
+
+function hitEnemy() {
+
+  if (!gameActive) return;
+
+
+  if (shield) {
+
+    shield = false;
+
+    document.getElementById("shopMessage").textContent =
+      "🛡️ Shield-მა დაგიცვა!";
+
+    document.getElementById("message").textContent =
+      "🛡️ Shield დაიხარჯა!";
+
+  } else {
+
+    score -= 5;
+
+    if (score < 0) {
+      score = 0;
+    }
+
+    combo = 0;
+
+    document.getElementById("score").textContent =
+      score;
+
+    document.getElementById("combo").textContent =
+      combo;
+
+    document.getElementById("message").textContent =
+      "👾 მტერს დააჭირე! -5 ქულა";
+  }
+
+
+  // 👾 დაჭერის შემდეგ ქრება
+
+  clearTimeout(enemyTimer);
+  clearTimeout(enemyMoveTimer);
+
+  document.getElementById("enemy").style.display =
+    "none";
+
+
+  // ⏳ ახალი მტერი 2 წამში
+
+  enemyTimer = setTimeout(function() {
+
+    showEnemy();
+
+  }, enemyPause);
+}
+
+
+// 👾 მტრის გამოჩენა
+
+function showEnemy() {
+
+  if (!gameActive) return;
+
+  clearTimeout(enemyTimer);
+  clearTimeout(enemyMoveTimer);
+
+  const enemy =
+    document.getElementById("enemy");
+
+  const area =
+    document.getElementById("gameArea");
+
+
+  const maxX =
+    area.clientWidth -
+    enemy.offsetWidth;
+
+  const maxY =
+    area.clientHeight -
+    enemy.offsetHeight;
+
+
+  const x =
+    Math.random() * maxX;
+
+  const y =
+    Math.random() * maxY;
+
+
+  enemy.style.left =
+    x + "px";
+
+  enemy.style.top =
+    y + "px";
+
+
+  // 👾 გამოჩნდეს
+
+  enemy.style.display =
+    "block";
+
+
+  // 👾 მოძრაობა
+
+  moveEnemy();
+
+
+  // ⏱️ 3 წამში გაქრეს
+
+  enemyTimer = setTimeout(function() {
+
+    if (!gameActive) return;
+
+    clearTimeout(enemyMoveTimer);
+
+    enemy.style.display =
+      "none";
+
+
+    // ⏳ 2 წამი პაუზა
+
+    enemyTimer = setTimeout(function() {
+
+      showEnemy();
+
+    }, enemyPause);
+
+  }, enemyVisibleTime);
+}
+
+
+// 👾 მტრის მოძრაობა
+
+function moveEnemy() {
+
+  if (!gameActive) return;
+
+  const enemy =
+    document.getElementById("enemy");
+
+  const area =
+    document.getElementById("gameArea");
+
+
+  const maxX =
+    area.clientWidth -
+    enemy.offsetWidth;
+
+  const maxY =
+    area.clientHeight -
+    enemy.offsetHeight;
+
+
+  const x =
+    Math.random() * maxX;
+
+  const y =
+    Math.random() * maxY;
+
+
+  enemy.style.left =
+    x + "px";
+
+  enemy.style.top =
+    y + "px";
+
+
+  enemyMoveTimer = setTimeout(function() {
+
+    moveEnemy();
+
+  }, enemyMoveSpeed);
+}
+
+
+// ⚡ მტრის სიჩქარე
+
+function updateEnemySpeed() {
+
+  // 👾 ყოველთვის 3 წამი ჩანს
+
+  enemyVisibleTime = 3000;
+
+
+  if (level === 1) {
+    enemyMoveSpeed = 500;
+  }
+
+  if (level === 2) {
+    enemyMoveSpeed = 400;
+  }
+
+  if (level === 3) {
+    enemyMoveSpeed = 300;
+  }
+
+  if (level >= 4) {
+    enemyMoveSpeed = 220;
+  }
+}
+
+
+// 🎯 Target-ის მოძრაობა
+
+function moveTarget() {
+
+  const area =
+    document.getElementById("gameArea");
+
+  const target =
+    document.getElementById("target");
+
+
+  const maxX =
+    area.clientWidth -
+    target.offsetWidth;
+
+  const maxY =
+    area.clientHeight -
+    target.offsetHeight;
+
+
+  const x =
+    Math.random() * maxX;
+
+  const y =
+    Math.random() * maxY;
+
+
+  target.style.left =
+    x + "px";
+
+  target.style.top =
+    y + "px";
+}
+
+
+// 🎯 Target-ის ავტომატური მოძრაობა
+
+function startTargetMovement() {
+
+  if (!gameActive) return;
+
+  moveTarget();
+
+  targetTimer = setTimeout(function() {
+
+    startTargetMovement();
+
+  }, targetSpeed);
+}
+
+
+// ⚙️ სირთულე
+
+function setDifficulty(levelName) {
+
+  if (levelName === "easy") {
+
+    targetSpeed = 1200;
+
+    document.getElementById("difficultyText").textContent =
+      "არჩეულია: 🟢 Easy";
+  }
+
+
+  if (levelName === "medium") {
+
+    targetSpeed = 700;
+
+    document.getElementById("difficultyText").textContent =
+      "არჩეულია: 🟡 Medium";
+  }
+
+
+  if (levelName === "hard") {
+
+    targetSpeed = 350;
+
+    document.getElementById("difficultyText").textContent =
+      "არჩეულია: 🔴 Hard";
+  }
+}
+
+
+// 🛒 Shop
+
+function buyItem(item) {
+
+  if (item === "double") {
+
+    if (coins < 20) {
+
+      document.getElementById("shopMessage").textContent =
+        "❌ 20 მონეტა გჭირდება!";
+
+      return;
+    }
+
+    coins -= 20;
+    doublePoints = true;
+
+    document.getElementById("coins").textContent =
+      coins;
+
+    localStorage.setItem(
+      "gameZoneCoins",
+      coins
+    );
+
+    document.getElementById("shopMessage").textContent =
+      "⚡ 2X ქულა გააქტიურდა!";
+  }
+
+
+  if (item === "shield") {
+
+    if (coins < 30) {
+
+      document.getElementById("shopMessage").textContent =
+        "❌ 30 მონეტა გჭირდება!";
+
+      return;
+    }
+
+    coins -= 30;
+    shield = true;
+
+    document.getElementById("coins").textContent =
+      coins;
+
+    localStorage.setItem(
+      "gameZoneCoins",
+      coins
+    );
+
+    document.getElementById("shopMessage").textContent =
+      "🛡️ Shield მზად არის!";
+  }
+}
+
+
+// 🎮 სხვა თამაშები
+
+function showGame(name) {
+
+  alert(
+    "შენ აირჩიე: " + name
+  );
+}
+
+
+// 🔎 Search
+
+document.getElementById("search").addEventListener(
+  "input",
+  function() {
+
+    const searchText =
+      this.value.toLowerCase();
+
+    const cards =
+      document.querySelectorAll(".card");
+
+
+    cards.forEach(function(card) {
+
+      const text =
+        card.textContent.toLowerCase();
+
+
+      if (text.includes(searchText)) {
+
+        card.style.display = "";
+
+      } else {
+
+        card.style.display = "none";
+      }
+
+    });
+  }
+);
